@@ -10,7 +10,7 @@ jshint -W106, -W052, -W098, -W003, -W068, -W004, -W033, -W030, -W117, -W116, -W0
 
     FormentryService.$inject = ['$http', 'SearchDataService', 'moment'];
 
-    function FormentryService($http, SearchDataService, moment) {
+    function FormentryService($http,SearchDataService, moment) {
         var service = {
             createForm: createForm,
             getConceptUuid:getConceptUuid,
@@ -1287,6 +1287,16 @@ jshint -W106, -W052, -W098, -W003, -W068, -W004, -W033, -W030, -W117, -W116, -W0
           //console.log(obs_field)
 
           var hideExpression_;
+          /*SearchDataService.getConceptAnswers(obs_field.concept,
+            function (options){
+              fieldAnswerOptions=options
+
+            },
+            function (error){
+              alert('EEEEEEEEEEERRRRoR')
+              console.log(error)
+            });*/
+
           if(obs_field.hide !== undefined)
           {
             hideExpression_= getFieldValidator(obs_field.hide[0]);
@@ -1346,11 +1356,21 @@ jshint -W106, -W052, -W098, -W003, -W068, -W004, -W033, -W030, -W117, -W116, -W0
           else if ((obs_field.type === 'radio') || (obs_field.type === 'select') || (obs_field.type === 'multiCheckbox'))
           {
             var opts= [];
+
+
+            var fieldType=obs_field.type;
+            var t=[]
+
+
             //Adding unselect option
             if (obs_field.type !== 'multiCheckbox')
               opts.push({name:'', value:'null'});
             //get the radio/select options/multicheckbox
             //console.log(obs_Field);
+            /*if(obs_field.type==='showcodedanswers') {
+              alert("TTTTTTYYYYY"+JSON.stringify(fieldAnswerOptions));
+            }*/
+
             _.each(obs_field.answers, function (answer) {
               // body...
               var item={
@@ -1418,7 +1438,7 @@ jshint -W106, -W052, -W098, -W003, -W068, -W004, -W033, -W030, -W117, -W116, -W0
               }
             };
           }
-        else if(obs_field.type === 'showcodedanswers'){
+          else if(obs_field.type === 'showcodedanswers'){
             var required=false;
             if (obs_field.required !== undefined) required=Boolean(obs_field.required);
             obsField = {
@@ -1429,12 +1449,35 @@ jshint -W106, -W052, -W098, -W003, -W068, -W004, -W033, -W030, -W117, -W116, -W0
               templateOptions: {
                 type: 'text',
                 label: obs_field.label,
-                valueProp: 'uuId',
-                labelProp:'display',
-                deferredFilterFunction: SearchDataService.findDrugConcepts,
-                getSelectedObjectFunction: SearchDataService.getConceptByUuid,
+                valueProp: 'value',
+                labelProp:'name',
+                deferredFilterFunction: getSelectOptions(obs_field.concept),
+                getSelectedObjectFunction: SearchDataService.getDrugConceptByUuid,
                 required:required,
                 options:[]
+              }
+            };
+          }
+        else if(obs_field.type === 'showcodedanswersss'){
+            alert(obs_field.type+"GGGGGGGGGGG")
+            getSelectOptions(obs_field.concept);
+
+            //
+
+            var required=false;
+            if (obs_field.required !== undefined) required=Boolean(obs_field.required);
+            obsField = {
+              key: 'obs_' + obs_field.concept,
+              type: 'select',
+              data: {concept:obs_field.concept,
+                answer_value:''},
+              templateOptions: {
+                type: 'select',
+                label: obs_field.label,
+                valueProp: 'value',
+                labelProp:'name',
+                options:selectoptions
+
               }
             };
           }
@@ -1677,6 +1720,36 @@ jshint -W106, -W052, -W098, -W003, -W068, -W004, -W033, -W030, -W117, -W116, -W0
 
             return value;
         }
+
+      function getSelectOptions(concept){
+
+        var optsss=SearchDataService.getConceptAnswers();
+        ///
+        var myoptions=[];
+
+        optsss.then(
+          // OnSuccess function
+          function(answer) {
+            var answes=JSON.stringify(answer);
+            for (var i = 0; i < answer.length; i++) {
+              var concept={
+                "value": concepts[i].uuid,
+                "name": concepts[i].display
+              }
+              myoptions.push(concept);
+            }
+
+          },
+          // OnFailure function
+          function(reason) {
+            console.log("ERRRRRRRRRRRRRRRR"+reason);
+
+          }
+        )
+
+        return myoptions;
+      }
+
 
     }
 })();

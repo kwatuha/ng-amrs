@@ -8,9 +8,9 @@ jshint -W098, -W003, -W068, -W004, -W033, -W026, -W030, -W117
         .module('app.formentry')
         .factory('SearchDataService', SearchDataService);
 
-    SearchDataService.$inject = ['ProviderResService', 'LocationResService', 'LocationModel', 'ProviderModel','ConceptResService', 'ConceptModel','DrugResService','DrugModel'];
+    SearchDataService.$inject = ['ProviderResService', 'LocationResService', 'LocationModel', 'ProviderModel','ConceptResService', 'ConceptModel','DrugResService','DrugModel','$q'];
 
-    function SearchDataService(ProviderResService, LocationResService, LocationModelFactory, ProviderModelFactory, ConceptResService, ConceptModelFactory, DrugResService, DrugModelFactory) {
+    function SearchDataService(ProviderResService, LocationResService, LocationModelFactory, ProviderModelFactory, ConceptResService, ConceptModelFactory, DrugResService, DrugModelFactory,$q) {
 
         var problemConceptClassesArray = ['Diagnosis','Symptom','Symptom/Finding','Finding'];
         var drugConceptClassesArray=['Drug'];
@@ -25,7 +25,9 @@ jshint -W098, -W003, -W068, -W004, -W033, -W026, -W030, -W117
             getDrugConceptByUuid:getDrugConceptByUuid,
             findDrugs:findDrugs,
             findDrugByUuid:findDrugByUuid,
-            getConceptAnswers:getConceptAnswers
+            getConceptAnswers:getConceptAnswers,
+            getConceptAnswersN:getConceptAnswersN,
+            conseptData:conceptData
         };
 
         return service;
@@ -142,16 +144,21 @@ jshint -W098, -W003, -W068, -W004, -W033, -W026, -W030, -W117
             });
         }
 
-        function getConceptAnswers(uuid, onSuccess, onError) {
-          ConceptResService.getConceptAnswers(uuid,
-            function (concept) {
-              var wrapped = wrapConceptsWithLabels(wrapConcepts(concept.answers));
-              onSuccess(wrapped);
-            },
-            function (error) {
-              onError(onError);
-            });
+        function getConceptAnswers(uuid) {
+          return ConceptResService.getConceptAnswers(uuid);
         }
+
+      function getConceptAnswersN(uuid) {
+        var deferObject  =  deferObject || $q.defer();
+        ConceptResService.getConceptAnswersN(uuid,
+          function (concept) {
+            conceptData(wrapConceptsWithLabels(concept.answers));
+            deferObject.resolve(wrapConceptsWithLabels(concept.answers));
+
+          },function (reason){
+            deferObject.reject(reason);
+          });
+      }
 
         function wrapDrug(drug) {
           return DrugModelFactory.toWrapper(drug);
@@ -205,13 +212,17 @@ jshint -W098, -W003, -W068, -W004, -W033, -W026, -W030, -W117
           var wrappedObjects = [];
           for (var i = 0; i < concepts.length; i++) {
                 var concept={
-                  "concept": concepts[i].uuId,
-                  "label": concepts[i].name
+                  "value": concepts[i].uuid,
+                  "name": concepts[i].display
                 }
             wrappedObjects.push(concept);
           }
           return wrappedObjects;
         }
+
+       function conceptData(data){
+         return data;
+       }
 
     }
 

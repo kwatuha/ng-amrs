@@ -42,6 +42,12 @@
               "validators":[]
             },
             {
+              "type": "showcodedanswers",
+              "concept": "a8a032fe-1350-11df-a1f1-0026b9348838",
+              "label": "Toxicity Cause Name",
+              "required": "true"
+            },
+            {
               "concept": "0f8b7f4e-1656-46b7-bc93-d1fe4f193f5d",
               "type": "group",
               "questions": [
