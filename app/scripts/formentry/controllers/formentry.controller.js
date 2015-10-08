@@ -253,10 +253,14 @@ function activate() {
             $scope.vm.encData = data;
             if (data) {
               $scope.vm.submitLabel = 'Update'
-              var existingPersonAttributes=$scope.vm.patient.getPersonAttributes();
-              if(existingPersonAttributes)
-              //formlySchema=PersonAttributesRestService.updateModelWIthExistingPersonAttributes(existingPersonAttributes,formlySchema);
-                FormentryService.getEncounter($scope.vm.encData,existingPersonAttributes,formlySchema);
+              var existingPersonAttributes=[];
+                  existingPersonAttributes=$scope.vm.patient.getPersonAttributes(); 
+                  if(existingPersonAttributes) {
+                   FormentryService.getEncounter($scope.vm.encData, formlySchema, existingPersonAttributes);  
+                  } else{
+                   FormentryService.getEncounter($scope.vm.encData, formlySchema); 
+                  }         
+                     
                
                 //updatePersonAttr
             }

@@ -235,7 +235,7 @@ jshint -W106, -W052, -W098, -W003, -W068, -W004, -W033, -W030, -W117, -W116, -W0
         /*
         Method to auto/prefill the form with existing data from OpenMRS
         */
-        function getEncounterHandler(enc_data,personAttributes, formlySchema)
+        function getEncounterHandler(enc_data, formlySchema, personAttributes)
         {
           /*
           Each page/tab has various sections
@@ -664,7 +664,7 @@ jshint -W106, -W052, -W098, -W003, -W068, -W004, -W033, -W030, -W117, -W116, -W0
 
 
 
-        function getEncounter(encData, personAttributes, formlySchema){
+        function getEncounter(encData,  formlySchema, personAttributes){
           //cbce861a-790c-4b91-80e6-3d75e671a4de
           //console.log('Sample data from REST API')
           //console.log(uuid);
@@ -682,7 +682,7 @@ jshint -W106, -W052, -W098, -W003, -W068, -W004, -W033, -W030, -W117, -W116, -W0
           */
 
 
-          getEncounterHandler(encData, personAttributes, formlySchema);
+          getEncounterHandler(encData, formlySchema ,personAttributes);
         }
 
         function validateForm()
