@@ -341,8 +341,8 @@ jshint -W106, -W052, -W098, -W003, -W068, -W004, -W033, -W030, -W117, -W116, -W0
                         if (val !== undefined) {
                           // console.log('Obs Date Key', _groupField.key);
                           // console.log('Obs Date value', val);
-                          groupVal[_groupField.key] = val.obsDatetime;
-                          _groupField.data['initialValue'] = val.obsDatetime;
+                          groupVal[_groupField.key] = new Date(val.obsDatetime);
+                          _groupField.data['initialValue'] = new Date(val.obsDatetime);
                           _groupField.data['uuid'] = val.uuid; //obs uuid
                         }
                       } else {
@@ -404,7 +404,7 @@ jshint -W106, -W052, -W098, -W003, -W068, -W004, -W033, -W030, -W117, -W116, -W0
 
                           if (val !== undefined) {
                             groupVal[_groupField.key] = new Date(val.obsDatetime);
-                            _groupField.data['initialValue'] = val.obsDatetime;
+                            _groupField.data['initialValue'] =new Date(val.obsDatetime);
                             _groupField.data['uuid'] = val.uuid; //obs uuid
                           }
                         } else {
