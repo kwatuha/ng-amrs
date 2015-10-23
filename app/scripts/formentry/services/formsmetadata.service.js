@@ -13,12 +13,12 @@ jshint -W098, -W026, -W003, -W068, -W004, -W033, -W030, -W117, -W116, -W069
     function FormsMetaData(CachedDataService) {
 
         var forms = {};        
-        // forms['form1'] = {
-        //   name: 'form1',
-        //   uuid: '1339a535-e38f-44cd-8cf8-f42f7c5f2ab7',
-        //   encounterType:'8d5b2be0-c2cc-11de-8d13-0010c6dffd0f',
-        //   encounterTypeName:'ADULT RETURN'
-        // };
+        var  defaultForm = {
+           name: 'ampath_poc_adult_return_visit_form_v0.01',
+           uuid: '1339a535-e38f-44cd-8cf8-f42f7c5f2ab7',
+           encounterType:'8d5b2be0-c2cc-11de-8d13-0010c6dffd0f',
+           encounterTypeName:'ADULT RETURN'
+         };
 
         // forms['form2'] = {
         //   name: 'form2',
@@ -64,8 +64,8 @@ jshint -W098, -W026, -W003, -W068, -W004, -W033, -W030, -W117, -W116, -W069
             else if (form.encounterType === uuid) return form;
             else if (form.name === uuid) return form;
           });
-          if (result === undefined) return forms['form1']; //should be refactored once everything is well structured
-          else return result;
+         if (result === undefined) return defaultForm; //forms['ampath_poc_adult_return_visit_form_v0.01']; //should be refactored once everything is well structured
+          return result;
         }
     }
 })();

@@ -44,7 +44,7 @@
            $rootScope.cachedPocForms = results;
            }, function(error){
             console.log(error);            
-          })
+          });
                   
           //console.log('Resolved View');
           //console.log($state.go('home'));
