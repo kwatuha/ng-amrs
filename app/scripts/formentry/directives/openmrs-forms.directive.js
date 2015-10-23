@@ -24,15 +24,12 @@ jshint -W003, -W026, -W033, -W098
        var forms=CachedDataService.getCachedPocForms();
         var patient=CachedDataService.getCachedPatient();
                   
-        if (forms)
-        {           
+        if (forms) {           
             scope.forms = forms;            
         }
         
-        if (patient)
-        {      
-             scope.patient=patient;            
-           
+        if (patient) {      
+             scope.patient=patient;               
         }
 
     }
