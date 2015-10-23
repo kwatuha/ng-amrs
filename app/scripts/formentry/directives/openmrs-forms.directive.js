@@ -11,7 +11,7 @@ jshint -W003, -W026, -W033, -W098
     function opemrsForms() {
         var opemrsFormsDefinition = {
             restrict: 'EA',
-            templateUrl: '/views/formentry/forms.html',
+            templateUrl: 'views/formentry/forms.html',
             controller: OpemrsFormsCtrl
         };
 
