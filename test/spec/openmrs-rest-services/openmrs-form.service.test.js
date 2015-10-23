@@ -83,7 +83,7 @@
       httpBackend.flush();
     });
 
-    it('person form service should have the following  methods',
+    it('Form service should have the following  methods',
     function() {
       expect(formService.findPocForms).to.be.an('function');
       expect(formService.getFormByUuid).to.be.an('function');
