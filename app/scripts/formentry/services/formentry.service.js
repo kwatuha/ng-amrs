@@ -125,8 +125,13 @@ jshint -W106, -W052, -W098, -W003, -W068, -W004, -W033, -W030, -W117, -W116, -W0
       return selectedField;
     }
 
+    function createValidFormName(formName){
+        return formName.replace(/ /gi, '_').toLowerCase();
+    }
+
     function getFormSchema(formName, callback) {
       var schema = {};
+      formName=createValidFormName(formName)
       // this should de dropped once we align all forms related issues
       if (formName !== undefined) {
         formName = formName + '.json';
