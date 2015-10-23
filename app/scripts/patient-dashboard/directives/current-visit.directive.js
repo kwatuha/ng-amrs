@@ -36,7 +36,8 @@ jshint -W003, -W026
         $scope.currentVisit = initializeCurrentVisit();
         $scope.busy = true;
         $scope.visitTypesLoaded = false;
-        $scope.formsFilledStatus = [{
+        $scope.formsFilledStatus = [];
+       /* $scope.formsFilledStatusa = [{
                 name: 'AMPATH POC Triage Encounter Form v0.01',
                 shortName: 'triage',
                 encounterType:'a44ad5e2-b3ec-42e7-8cfa-8ba3dbcf5ed7',
@@ -62,8 +63,14 @@ jshint -W003, -W026
                 encounterType: 'b1e9ed0f-5222-4d47-98f7-5678b8a21ebd',
                 filled: false
             }
-        ];
+        ];*/
         
+          _.each($rootScope.cachedPocForms, function(form)
+          {
+              form.filled=false;
+              $scope.formsFilledStatus.push(form)
+          });
+          
         $scope.startNewVisit = function() {
              $scope.currentVisit.startDatetime = new Date();
              //Create visit
