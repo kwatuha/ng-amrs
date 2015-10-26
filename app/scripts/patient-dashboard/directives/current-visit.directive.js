@@ -37,35 +37,8 @@ jshint -W003, -W026
         $scope.busy = true;
         $scope.visitTypesLoaded = false;
         $scope.formsFilledStatus = [];
-       /* $scope.formsFilledStatusa = [{
-                name: 'AMPATH POC Triage Encounter Form v0.01',
-                shortName: 'triage',
-                encounterType:'a44ad5e2-b3ec-42e7-8cfa-8ba3dbcf5ed7',
-                filled: false
-            }, {
-                name: 'AMPATH POC Adult Return Visit Form v0.01',
-                shortName: 'form1',
-                encounterType: '8d5b2be0-c2cc-11de-8d13-0010c6dffd0f',
-                filled: false
-            }, {
-                name: 'AMPATH POC Pediatric Return Visit Form v0.01',
-                shortName: 'form2',
-                encounterType: '8d5b3108-c2cc-11de-8d13-0010c6dffd0f',
-                filled: false
-            }, {
-                name: 'AMPATH POC PMTCT Postnatal Care Encounter Form v0.01',
-                shortName: 'form3',
-                encounterType: 'b1e9ed0f-5222-4d47-98f7-5678b8a21ebd',
-                filled: false
-            }, {
-                name: 'AMPATH POC Lab Entry Encounter Form v0.01',
-                shortName: 'poclab',
-                encounterType: 'b1e9ed0f-5222-4d47-98f7-5678b8a21ebd',
-                filled: false
-            }
-        ];*/
         
-          _.each($rootScope.cachedPocForms, function(form)
+        _.each($rootScope.cachedPocForms, function(form)
           {
               form.filled=false;
               $scope.formsFilledStatus.push(form)
