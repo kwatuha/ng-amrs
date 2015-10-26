@@ -20,7 +20,8 @@
       getMonthlyAppointmentAndVisits: getMonthlyAppointmentAndVisits,
       getDefaultersList: getDefaultersList,
       getDailyVisits: getDailyVisits,
-      getPatientsCreatedByPeriod:getPatientsCreatedByPeriod
+      getPatientsCreatedByPeriod:getPatientsCreatedByPeriod,
+      getDetailsOfPatientsCreatedInLocation:getDetailsOfPatientsCreatedInLocation
     };
     return serviceDefinition;
 
@@ -255,5 +256,31 @@
         });
 
     }
+    
+    function getDetailsOfPatientsCreatedInLocation(location,startDate, endDate, successCallback, failedCallback, startIndex, limit) {
+      var resource = getResource('location/:location/patient/creation/statistics');
+      var params = {location:location, startDate: startDate, endDate: endDate };
+      
+      if (startIndex !== undefined) {
+        params.startIndex = startIndex;
+      }
+
+      if (limit !== undefined) {
+        params.limit = limit;
+      }
+
+      console.log(params);
+      console.log(startIndex);
+
+      return resource.get(params).$promise
+        .then(function (response) {
+          successCallback(response);
+        })
+        .catch(function (error) {
+          failedCallback('Error processing request', error);
+          console.error(error);
+        });
+
+    }    
   }
 })();

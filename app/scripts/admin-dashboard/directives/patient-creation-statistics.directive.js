@@ -35,6 +35,13 @@ jshint -W003, -W026
         $scope.experiencedStatisticsLoadError = false;        
         $scope.creationstatistics=false;
         $scope.showStatistics = false;
+        
+        $scope.experiencedStatisticsDetailLoadError=false;
+        $scope.showCreationDetails=false;
+        $scope.showPatientsInLocation=false;
+        $scope.selectedLocation='';
+        $scope.patientInLocationSearchString='';
+        $scope.patientDetails=false;
                        
         $scope.selectedDate = function (value) {
             if (value) {                
@@ -104,6 +111,33 @@ jshint -W003, -W026
         function onFailedPatientStatisticsQuery(error){           
                    $scope.experiencedStatisticsLoadError=true;                                              
         }
+        
+        $scope.loadPatientDetails =function (locationId,locationName) {            
+            $scope.showPatientsInLocation=true;                 
+            $scope.selectedLocation=locationName;    
+                
+            EtlRestService.getDetailsOfPatientsCreatedInLocation(
+                    locationId,
+                    moment($scope.startDate).startOf('day').format('YYYY-MM-DDTHH:mm:ss.SSSZZ'),
+                    moment($scope.endDate).startOf('day').format('YYYY-MM-DDTHH:mm:ss.SSSZZ'),
+                    onSuccessDetailsOfPatientsCreatedInLocationQuery,
+                    onFailedDetailsOfPatientsCreatedInLocationQuery
+            );                    
+      };      
+            
+       function onSuccessDetailsOfPatientsCreatedInLocationQuery(data){ 
+                   if($scope.showStatistics) 
+                   $scope.showStatistics=false;
+                   $scope.showCreationDetails=true;                
+                   $scope.patientInLocation=data;
+                   $scope.nextStartIndex = +data.startIndex + data.size;
+                   $scope.experiencedStatisticsDetailLoadError=false;
+        }
+        
+        function onFailedDetailsOfPatientsCreatedInLocationQuery(error){
+                   $scope.experiencedStatisticsDetailLoadError=true;                              
+        }   
+
         
         
     }    
