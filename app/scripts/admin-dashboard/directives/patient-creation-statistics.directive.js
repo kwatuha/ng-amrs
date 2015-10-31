@@ -32,6 +32,7 @@ jshint -W003, -W026
         
         $scope.statisticSearchString='';
         $scope.isBusyStatistics = false;
+        $scope.isBusyStatisticsDetails=false;
         $scope.experiencedStatisticsLoadError = false;        
         $scope.creationstatistics=false;
         $scope.showStatistics = false;
@@ -42,6 +43,7 @@ jshint -W003, -W026
         $scope.selectedLocation='';
         $scope.patientInLocationSearchString='';
         $scope.patientDetails=false;
+        $scope.selectedLocationId='';
                        
         $scope.selectedDate = function (value) {
             if (value) {                
@@ -82,15 +84,22 @@ jshint -W003, -W026
         };
         
          function openEndDatePopup ($event) {
-            $event.preventDefault();
-            $event.stopPropagation();
-            $scope.endDateControlStatus.startOpened = true;
+             $event.preventDefault();
+             $event.stopPropagation();
+             $scope.endDateControlStatus.startOpened = true;
         };
 
-        $scope.loadPatientCreationStats=function(){       
+        $scope.loadPatientCreationStats=function(){  
+          if ($scope.isBusyStatisticsDetails === true || $scope.isBusyStatistics) return;              
            $scope.isBusyStatistics = true;
            $scope.patientCreationStatisticsLoadError=false;
            
+            if ($scope.endDate<$scope.startDate){
+                $scope.dateRangeError="The selected end date Must be greater than start date";
+                return;
+            }            
+                      
+           if ($scope.endDate && $scope.endDate !== '' && $scope.startDate && $scope.startDate !== '')
            EtlRestService.getPatientsCreatedByPeriod(
                 moment($scope.startDate).startOf('day').format('YYYY-MM-DDTHH:mm:ss.SSSZZ'),
                 moment($scope.endDate).startOf('day').format('YYYY-MM-DDTHH:mm:ss.SSSZZ'),
@@ -100,24 +109,35 @@ jshint -W003, -W026
         };
         
         function onSuccessPatientStatisticsQuery(data){                   
-                   $scope.showStatistics=true;                   
-                   $scope.patientStatistics=data;
-                   $scope.nextStartIndex = +data.startIndex + data.size;
-                   $scope.isBusyStatistics = false;
-                   $scope.experiencedStatisticsLoadError=false;
-                   $scope.showCreationDetails=false;                  
+            $scope.showStatistics=true;                   
+            $scope.patientStatistics=data;
+            $scope.nextStartIndex = +data.startIndex + data.size;
+            $scope.isBusyStatistics = false;
+            $scope.experiencedStatisticsLoadError=false;
+            $scope.showCreationDetails=false;                  
         }
         
         function onFailedPatientStatisticsQuery(error){           
-                   $scope.experiencedStatisticsLoadError=true;                                              
+            $scope.experiencedStatisticsLoadError=true; 
+            $scope.isBusyStatistics=false;                                             
         }
         
-        $scope.loadPatientDetails =function (locationId,locationName) {            
+            $scope.loadPatientDetails =function (locationId,locationName) { 
+            if ($scope.isBusyStatisticsDetails === true || $scope.isBusyStatistics) return;           
             $scope.showPatientsInLocation=true;                 
-            $scope.selectedLocation=locationName;    
-                
+            $scope.selectedLocation=locationName;
+            $scope.selectedLocationId=locationId;   
+            $scope.isBusyStatisticsDetails=true;
+            $scope.experiencedStatisticsDetailLoadError=false; 
+            
+            if ($scope.endDate<$scope.startDate){
+                $scope.dateRangeError="The selected end date Must be greater than start date";
+                return;
+            }
+            
+            if ($scope.endDate && $scope.endDate !== '' && $scope.startDate && $scope.startDate !== '' && $scope.selectedLocationId && $scope.selectedLocationId !== '')    
             EtlRestService.getDetailsOfPatientsCreatedInLocation(
-                    locationId,
+                    $scope.selectedLocationId,
                     moment($scope.startDate).startOf('day').format('YYYY-MM-DDTHH:mm:ss.SSSZZ'),
                     moment($scope.endDate).startOf('day').format('YYYY-MM-DDTHH:mm:ss.SSSZZ'),
                     onSuccessDetailsOfPatientsCreatedInLocationQuery,
@@ -126,16 +146,18 @@ jshint -W003, -W026
       };      
             
        function onSuccessDetailsOfPatientsCreatedInLocationQuery(data){ 
-                   if($scope.showStatistics) 
-                   $scope.showStatistics=false;
-                   $scope.showCreationDetails=true;                
-                   $scope.patientInLocation=data;
-                   $scope.nextStartIndex = +data.startIndex + data.size;
-                   $scope.experiencedStatisticsDetailLoadError=false;
+           if($scope.showStatistics) 
+           $scope.showStatistics=false;
+           $scope.showCreationDetails=true;                
+           $scope.patientInLocation=data;
+           $scope.nextStartIndex = +data.startIndex + data.size;
+           $scope.experiencedStatisticsDetailLoadError=false;
+           $scope.isBusyStatisticsDetails=false; 
         }
         
         function onFailedDetailsOfPatientsCreatedInLocationQuery(error){
-                   $scope.experiencedStatisticsDetailLoadError=true;                              
+                   $scope.experiencedStatisticsDetailLoadError=true;
+                   $scope.isBusyStatisticsDetails=false;                              
         }   
 
         
