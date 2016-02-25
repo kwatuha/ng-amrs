@@ -869,6 +869,7 @@ jshint -W098, -W003, -W068, -W004, -W033, -W030, -W117, -W069, -W106
                     .saveUpdatePersonAttribute(attribute, function (data) {
                         if (data) {
                             $log.log('Updated attribute: ', data);
+                            reloadPatientAfterUpdate(attribute.person.uuid());
                         }
                         numberOfRequests--;
                         //call final callback by voting
@@ -898,5 +899,13 @@ jshint -W098, -W003, -W068, -W004, -W033, -W030, -W117, -W069, -W106
         }
 
         //Endregion: PatientSummary
+        
+        function reloadPatientAfterUpdate(patientUuid) {
+           OpenmrsRestService.getPatientService().getPatientByUuid({ uuid: patientUuid },
+              function (patientInformation) {
+                $rootScope.broadcastPatient = patientInformation;  
+
+              });
+          }
     }
 })();
