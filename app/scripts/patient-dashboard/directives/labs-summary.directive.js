@@ -73,6 +73,21 @@ jshint -W003, -W026
       name: 'chest_xray',
       headers: 'CXR'
     }, {
+      name: 'hba1c',
+      headers: 'HbA1c'
+    }, {
+      name: 'rbs',
+      headers: 'RBS'
+    }, {
+      name: 'fbs',
+      headers: 'FBS'
+    }, {
+      name: 'ecg',
+      headers: 'EKG'
+    }, {
+      name: 'urea',
+      headers: 'Urea'
+    }, {
       name: 'tests_ordered',
       headers: 'Tests Ordered'
     }, {
